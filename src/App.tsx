@@ -1,9 +1,12 @@
 import "./App.css";
+import { ThemeProvider } from "./components/theme-provider";
 
-function App() {
+function App({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <h1 className="text-3xl font-bold underline text-center">Hello world!</h1>
+      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+        {children}
+      </ThemeProvider>
     </>
   );
 }
