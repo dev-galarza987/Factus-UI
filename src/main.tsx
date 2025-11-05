@@ -6,6 +6,7 @@ import App from './App.tsx'
 import { HomePage } from './pages/HomePage.tsx'
 import { CompaniesPage, CompanyFormPage, CompanyDetailsPage, CompanyStatsPage } from './pages/companies'
 import { CustomersPage, CustomerFormPage, CustomerDetailsPage, CustomerStatsPage } from './pages/customers'
+import { InvoicesPage, InvoiceFormPage, InvoiceDetailsPage, InvoiceStatsPage } from './pages/invoices'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -23,6 +24,11 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/customers/new" element={<CustomerFormPage />} />
           <Route path="/customers/:id" element={<CustomerDetailsPage />} />
           <Route path="/customers/:id/edit" element={<CustomerFormPage />} />
+          <Route path="/invoices" element={<InvoicesPage />} />
+          <Route path="/invoices/stats" element={<InvoiceStatsPage />} />
+          <Route path="/invoices/new" element={<InvoiceFormPage />} />
+          <Route path="/invoices/:id" element={<InvoiceDetailsPage />} />
+          <Route path="/invoices/:id/edit" element={<InvoiceFormPage />} />
         </Routes>
       </BrowserRouter>
     </App>

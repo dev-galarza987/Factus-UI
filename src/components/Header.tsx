@@ -39,9 +39,11 @@ export function Header() {
               Clientes
             </Button>
           </Link>
-          <Button variant="ghost" size="sm">
-            Facturas
-          </Button>
+          <Link to="/invoices">
+            <Button variant="ghost" size="sm">
+              Facturas
+            </Button>
+          </Link>
           <Button variant="ghost" size="sm">
             Pagos
           </Button>
