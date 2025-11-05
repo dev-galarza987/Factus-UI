@@ -1,20 +1,23 @@
 import { Button } from "../components/ui/button";
 import { ModeToggle } from "../components/mode-toggle";
 import { DatabaseIcon } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between px-4">
-        <div className="flex items-center gap-2">
+        <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
           <DatabaseIcon className="size-6 text-primary" />
           <span className="text-xl font-bold">Factus UI</span>
-        </div>
+        </Link>
 
         <nav className="flex items-center gap-4">
-          <Button variant="ghost" size="sm">
-            Empresas
-          </Button>
+          <Link to="/companies">
+            <Button variant="ghost" size="sm">
+              Empresas
+            </Button>
+          </Link>
           <Button variant="ghost" size="sm">
             Clientes
           </Button>

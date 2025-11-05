@@ -3,6 +3,7 @@ import { Button } from "../components/ui/button"
 import { Badge } from "../components/ui/badge"
 import { Separator } from "../components/ui/separator"
 import { Header } from "../components/Header"
+import { Link } from "react-router-dom"
 import { 
   BuildingIcon, 
   UsersIcon, 
@@ -22,28 +23,36 @@ export function HomePage() {
       title: "Gestión de Empresas",
       description: "Administra múltiples empresas con sus datos fiscales y de contacto",
       endpoint: "/api/v1/company",
-      color: "text-blue-500"
+      path: "/companies",
+      color: "text-blue-500",
+      available: true
     },
     {
       icon: UsersIcon,
       title: "Clientes",
       description: "Gestiona tu cartera de clientes con información completa y actualizada",
       endpoint: "/api/v1/customer",
-      color: "text-green-500"
+      path: "/customers",
+      color: "text-green-500",
+      available: false
     },
     {
       icon: FileTextIcon,
       title: "Facturas",
       description: "Crea, consulta y administra facturas con detalles completos",
       endpoint: "/api/v1/invoice",
-      color: "text-purple-500"
+      path: "/invoices",
+      color: "text-purple-500",
+      available: false
     },
     {
       icon: CreditCardIcon,
       title: "Pagos",
       description: "Registra y da seguimiento a los pagos recibidos",
       endpoint: "/api/v1/payment",
-      color: "text-orange-500"
+      path: "/payments",
+      color: "text-orange-500",
+      available: false
     }
   ]
 
@@ -90,14 +99,22 @@ export function HomePage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
           {features.map((feature, index) => {
             const Icon = feature.icon
-            return (
-              <Card key={index} className="group hover:shadow-lg transition-all duration-300 hover:scale-[1.02]">
+            
+            const cardContent = (
+              <Card className={`group hover:shadow-lg transition-all duration-300 ${feature.available ? 'hover:scale-[1.02] cursor-pointer' : 'opacity-60'}`}>
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <Icon className={`size-10 ${feature.color} mb-4`} />
-                    <Badge variant="outline" className="text-xs">
-                      REST API
-                    </Badge>
+                    <div className="flex gap-2">
+                      <Badge variant="outline" className="text-xs">
+                        REST API
+                      </Badge>
+                      {!feature.available && (
+                        <Badge variant="secondary" className="text-xs">
+                          Próximamente
+                        </Badge>
+                      )}
+                    </div>
                   </div>
                   <CardTitle className="text-2xl">{feature.title}</CardTitle>
                   <CardDescription className="text-base">
@@ -109,10 +126,22 @@ export function HomePage() {
                     <code className="text-xs bg-muted px-3 py-1 rounded-md font-mono">
                       {feature.endpoint}
                     </code>
-                    <ArrowRightIcon className="size-4 text-muted-foreground group-hover:translate-x-1 transition-transform" />
+                    {feature.available && (
+                      <ArrowRightIcon className="size-4 text-muted-foreground group-hover:translate-x-1 transition-transform" />
+                    )}
                   </div>
                 </CardContent>
               </Card>
+            )
+            
+            return feature.available ? (
+              <Link key={index} to={feature.path} className="no-underline">
+                {cardContent}
+              </Link>
+            ) : (
+              <div key={index}>
+                {cardContent}
+              </div>
             )
           })}
         </div>
