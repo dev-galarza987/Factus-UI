@@ -44,9 +44,11 @@ export function Header() {
               Facturas
             </Button>
           </Link>
-          <Button variant="ghost" size="sm">
-            Pagos
-          </Button>
+          <Link to="/payments">
+            <Button variant="ghost" size="sm">
+              Pagos
+            </Button>
+          </Link>
           <ModeToggle />
         </motion.nav>
       </div>
