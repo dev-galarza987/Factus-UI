@@ -11,7 +11,6 @@ import {
   FileText,
   TrendingUp,
   CreditCard,
-  Download,
   RefreshCw
 } from 'lucide-react'
 import { Button } from '../../components/ui/button'
@@ -166,12 +165,22 @@ export function PaymentsPage() {
       {/* Header */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Pagos</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-3xl font-bold flex items-center gap-2">
+            <CreditCard className="h-8 w-8" />
+            Pagos
+          </h1>
+          <p className="text-muted-foreground mt-1">
             Gestiona los pagos de facturas
           </p>
         </div>
         <div className="flex gap-2">
+          <Button 
+            variant="outline" 
+            onClick={() => navigate('/payments/stats')}
+          >
+            <TrendingUp className="h-4 w-4 mr-2" />
+            Estadísticas
+          </Button>
           <Button variant="outline" size="sm" onClick={handleRefresh}>
             <RefreshCw className="size-4 mr-2" />
             Actualizar
@@ -301,18 +310,6 @@ export function PaymentsPage() {
                   <SelectItem value="OTHER">Otro</SelectItem>
                 </SelectContent>
               </Select>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Acciones</label>
-              <div className="flex gap-2">
-                <Button variant="outline" className="flex-1" asChild>
-                  <Link to="/payments/stats">
-                    <Download className="size-4 mr-2" />
-                    Estadísticas
-                  </Link>
-                </Button>
-              </div>
             </div>
           </div>
         </CardContent>
