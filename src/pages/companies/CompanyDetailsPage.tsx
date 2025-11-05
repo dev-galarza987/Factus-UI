@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams, Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import { 
   ArrowLeftIcon, 
   PencilIcon, 
@@ -115,7 +116,12 @@ export function CompanyDetailsPage() {
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
-          <div className="mb-6">
+          <motion.div 
+            className="mb-6"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+          >
             <Button
               variant="ghost"
               onClick={() => navigate('/companies')}
@@ -124,17 +130,26 @@ export function CompanyDetailsPage() {
               <ArrowLeftIcon className="size-4 mr-2" />
               Volver a empresas
             </Button>
-          </div>
+          </motion.div>
 
           {/* Company Header Card */}
-          <Card className="mb-6">
-            <CardContent className="pt-6">
-              <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-                <div className="flex items-start gap-4">
-                  <div className="flex size-16 items-center justify-center rounded-lg bg-primary/10">
-                    <BuildingIcon className="size-8 text-primary" />
-                  </div>
-                  <div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.7 }}
+          >
+            <Card className="mb-6">
+              <CardContent className="pt-6">
+                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+                  <div className="flex items-start gap-4">
+                    <motion.div 
+                      className="flex size-16 items-center justify-center rounded-lg bg-primary/10"
+                      whileHover={{ scale: 1.1, rotate: 5 }}
+                      transition={{ type: "spring", stiffness: 250, damping: 15 }}
+                    >
+                      <BuildingIcon className="size-8 text-primary" />
+                    </motion.div>
+                    <div>
                     <h1 className="text-2xl font-bold mb-1">{company.businessName}</h1>
                     <div className="flex items-center gap-2 mb-2">
                       <Badge variant="outline" className="font-mono">
@@ -165,15 +180,21 @@ export function CompanyDetailsPage() {
               </div>
             </CardContent>
           </Card>
+          </motion.div>
 
           <div className="grid gap-6 md:grid-cols-2">
             {/* Información de Contacto */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Información de Contacto</CardTitle>
-                <CardDescription>Datos de contacto de la empresa</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.5, duration: 0.7 }}
+            >
+              <Card>
+                <CardHeader>
+                  <CardTitle>Información de Contacto</CardTitle>
+                  <CardDescription>Datos de contacto de la empresa</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
                 <div className="flex items-start gap-3">
                   <MailIcon className="size-5 text-muted-foreground mt-0.5" />
                   <div>
@@ -230,14 +251,20 @@ export function CompanyDetailsPage() {
                 </div>
               </CardContent>
             </Card>
+            </motion.div>
 
             {/* Información del Sistema */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Información del Sistema</CardTitle>
-                <CardDescription>Datos de registro y actualización</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.7, duration: 0.7 }}
+            >
+              <Card>
+                <CardHeader>
+                  <CardTitle>Información del Sistema</CardTitle>
+                  <CardDescription>Datos de registro y actualización</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
                 <div className="flex items-start gap-3">
                   <HashIcon className="size-5 text-muted-foreground mt-0.5" />
                   <div>
@@ -269,6 +296,7 @@ export function CompanyDetailsPage() {
                 </div>
               </CardContent>
             </Card>
+            </motion.div>
           </div>
         </div>
       </div>

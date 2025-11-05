@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
+import { motion } from 'framer-motion'
 import { ArrowLeftIcon, SaveIcon, BuildingIcon } from 'lucide-react'
 import { Button } from '../../components/ui/button'
 import { Input } from '../../components/ui/input'
@@ -113,7 +114,12 @@ export function CompanyFormPage() {
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto">
           {/* Header */}
-          <div className="mb-6">
+          <motion.div 
+            className="mb-6"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+          >
             <Button
               variant="ghost"
               onClick={() => navigate('/companies')}
@@ -122,33 +128,54 @@ export function CompanyFormPage() {
               <ArrowLeftIcon className="size-4 mr-2" />
               Volver a empresas
             </Button>
-            <h1 className="text-3xl font-bold flex items-center gap-2">
+            <motion.h1 
+              className="text-3xl font-bold flex items-center gap-2"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.3, duration: 0.7 }}
+            >
               <BuildingIcon className="size-8 text-primary" />
               {isEditMode ? 'Editar Empresa' : 'Nueva Empresa'}
-            </h1>
-            <p className="text-muted-foreground mt-2">
+            </motion.h1>
+            <motion.p 
+              className="text-muted-foreground mt-2"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5, duration: 0.7 }}
+            >
               {isEditMode 
                 ? 'Actualiza la información de la empresa' 
                 : 'Completa el formulario para registrar una nueva empresa'}
-            </p>
-          </div>
+            </motion.p>
+          </motion.div>
 
           {/* Error Alert */}
           {error && (
-            <Alert variant="destructive" className="mb-6">
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+            >
+              <Alert variant="destructive" className="mb-6">
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            </motion.div>
           )}
 
           {/* Form Card */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Información de la Empresa</CardTitle>
-              <CardDescription>
-                Los campos marcados con * son obligatorios
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.7 }}
+          >
+            <Card>
+              <CardHeader>
+                <CardTitle>Información de la Empresa</CardTitle>
+                <CardDescription>
+                  Los campos marcados con * son obligatorios
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 {/* Razón Social */}
                 <div className="space-y-2">
@@ -313,6 +340,7 @@ export function CompanyFormPage() {
               </form>
             </CardContent>
           </Card>
+          </motion.div>
         </div>
       </div>
     </>

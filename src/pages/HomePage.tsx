@@ -4,6 +4,7 @@ import { Badge } from "../components/ui/badge"
 import { Separator } from "../components/ui/separator"
 import { Header } from "../components/Header"
 import { Link } from "react-router-dom"
+import { motion } from "framer-motion"
 import { 
   BuildingIcon, 
   UsersIcon, 
@@ -69,21 +70,47 @@ export function HomePage() {
       <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
         {/* Hero Section */}
         <div className="container mx-auto px-4 py-16">
-        <div className="text-center space-y-6 mb-16">
-          <Badge variant="secondary" className="text-sm px-4 py-1">
-            <ServerIcon className="size-3 mr-2 inline" />
-            API REST v1.0.0
-          </Badge>
+        <motion.div 
+          className="text-center space-y-6 mb-16"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.3, duration: 0.6 }}
+          >
+            <Badge variant="secondary" className="text-sm px-4 py-1">
+              <ServerIcon className="size-3 mr-2 inline" />
+              API REST v1.0.0
+            </Badge>
+          </motion.div>
           
-          <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+          <motion.h1 
+            className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.8 }}
+          >
             Factus API
-          </h1>
+          </motion.h1>
           
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <motion.p 
+            className="text-xl text-muted-foreground max-w-2xl mx-auto"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.7, duration: 0.8 }}
+          >
             Sistema de facturación completo con API REST construido con tecnologías modernas
-          </p>
+          </motion.p>
 
-          <div className="flex flex-wrap gap-4 justify-center items-center pt-4">
+          <motion.div 
+            className="flex flex-wrap gap-4 justify-center items-center pt-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.9, duration: 0.7 }}
+          >
             <Button size="lg" className="gap-2">
               Ver Documentación
               <ArrowRightIcon className="size-4" />
@@ -92,8 +119,8 @@ export function HomePage() {
               <DatabaseIcon className="size-4" />
               Swagger UI
             </Button>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* Features Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
@@ -101,37 +128,51 @@ export function HomePage() {
             const Icon = feature.icon
             
             const cardContent = (
-              <Card className={`group hover:shadow-lg transition-all duration-300 ${feature.available ? 'hover:scale-[1.02] cursor-pointer' : 'opacity-60'}`}>
-                <CardHeader>
-                  <div className="flex items-start justify-between">
-                    <Icon className={`size-10 ${feature.color} mb-4`} />
-                    <div className="flex gap-2">
-                      <Badge variant="outline" className="text-xs">
-                        REST API
-                      </Badge>
-                      {!feature.available && (
-                        <Badge variant="secondary" className="text-xs">
-                          Próximamente
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15 * index, duration: 0.7 }}
+                whileHover={{ scale: feature.available ? 1.02 : 1 }}
+                whileTap={{ scale: feature.available ? 0.98 : 1 }}
+              >
+                <Card className={`group hover:shadow-lg transition-all duration-300 ${feature.available ? 'cursor-pointer' : 'opacity-60'}`}>
+                  <CardHeader>
+                    <div className="flex items-start justify-between">
+                      <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ delay: 0.3 + 0.15 * index, type: "spring", stiffness: 150, damping: 15 }}
+                      >
+                        <Icon className={`size-10 ${feature.color} mb-4`} />
+                      </motion.div>
+                      <div className="flex gap-2">
+                        <Badge variant="outline" className="text-xs">
+                          REST API
                         </Badge>
+                        {!feature.available && (
+                          <Badge variant="secondary" className="text-xs">
+                            Próximamente
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+                    <CardTitle className="text-2xl">{feature.title}</CardTitle>
+                    <CardDescription className="text-base">
+                      {feature.description}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center justify-between">
+                      <code className="text-xs bg-muted px-3 py-1 rounded-md font-mono">
+                        {feature.endpoint}
+                      </code>
+                      {feature.available && (
+                        <ArrowRightIcon className="size-4 text-muted-foreground group-hover:translate-x-1 transition-transform" />
                       )}
                     </div>
-                  </div>
-                  <CardTitle className="text-2xl">{feature.title}</CardTitle>
-                  <CardDescription className="text-base">
-                    {feature.description}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center justify-between">
-                    <code className="text-xs bg-muted px-3 py-1 rounded-md font-mono">
-                      {feature.endpoint}
-                    </code>
-                    {feature.available && (
-                      <ArrowRightIcon className="size-4 text-muted-foreground group-hover:translate-x-1 transition-transform" />
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </motion.div>
             )
             
             return feature.available ? (

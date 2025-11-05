@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import { 
   PlusIcon, 
   SearchIcon, 
@@ -86,55 +87,93 @@ export function CompaniesPage() {
       <Header />
       <div className="container mx-auto px-4 py-8">
         {/* Header Section */}
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-8">
+        <motion.div 
+          className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-8"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+        >
           <div>
-            <h1 className="text-3xl font-bold flex items-center gap-2">
+            <motion.h1 
+              className="text-3xl font-bold flex items-center gap-2"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.3, duration: 0.7 }}
+            >
               <BuildingIcon className="size-8 text-primary" />
               Gestión de Empresas
-            </h1>
-            <p className="text-muted-foreground mt-2">
+            </motion.h1>
+            <motion.p 
+              className="text-muted-foreground mt-2"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5, duration: 0.7 }}
+            >
               Administra todas las empresas registradas en el sistema
-            </p>
+            </motion.p>
           </div>
-          <Link to="/companies/new">
-            <Button size="lg" className="gap-2">
-              <PlusIcon className="size-4" />
-              Nueva Empresa
-            </Button>
-          </Link>
-        </div>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.6, type: "spring", stiffness: 150, damping: 15 }}
+          >
+            <Link to="/companies/new">
+              <Button size="lg" className="gap-2">
+                <PlusIcon className="size-4" />
+                Nueva Empresa
+              </Button>
+            </Link>
+          </motion.div>
+        </motion.div>
 
         {/* Search Bar */}
-        <Card className="mb-6">
-          <CardContent className="pt-6">
-            <div className="relative">
-              <SearchIcon className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                placeholder="Buscar por nombre, RUC o email..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-          </CardContent>
-        </Card>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.7 }}
+        >
+          <Card className="mb-6">
+            <CardContent className="pt-6">
+              <div className="relative">
+                <SearchIcon className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  placeholder="Buscar por nombre, RUC o email..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
 
         {/* Error Alert */}
         {error && (
-          <Alert variant="destructive" className="mb-6">
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            <Alert variant="destructive" className="mb-6">
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          </motion.div>
         )}
 
         {/* Table Card */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Lista de Empresas</CardTitle>
-            <CardDescription>
-              {filteredCompanies.length} empresa{filteredCompanies.length !== 1 ? 's' : ''} encontrada{filteredCompanies.length !== 1 ? 's' : ''}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.7 }}
+        >
+          <Card>
+            <CardHeader>
+              <CardTitle>Lista de Empresas</CardTitle>
+              <CardDescription>
+                {filteredCompanies.length} empresa{filteredCompanies.length !== 1 ? 's' : ''} encontrada{filteredCompanies.length !== 1 ? 's' : ''}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
             {loading ? (
               // Loading skeleton
               <div className="space-y-4">
@@ -175,13 +214,23 @@ export function CompaniesPage() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {filteredCompanies.map((company) => (
-                      <TableRow key={company.id}>
+                    {filteredCompanies.map((company, index) => (
+                      <motion.tr 
+                        key={company.id}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.08, duration: 0.5 }}
+                        className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+                      >
                         <TableCell>
                           <div className="flex items-center gap-2">
-                            <div className="flex size-10 items-center justify-center rounded-lg bg-primary/10">
+                            <motion.div 
+                              className="flex size-10 items-center justify-center rounded-lg bg-primary/10"
+                              whileHover={{ scale: 1.1, rotate: 5 }}
+                              transition={{ type: "spring", stiffness: 250, damping: 15 }}
+                            >
                               <BuildingIcon className="size-5 text-primary" />
-                            </div>
+                            </motion.div>
                             <div>
                               <p className="font-medium">{company.businessName}</p>
                               <p className="text-xs text-muted-foreground">
@@ -237,7 +286,7 @@ export function CompaniesPage() {
                             </Button>
                           </div>
                         </TableCell>
-                      </TableRow>
+                      </motion.tr>
                     ))}
                   </TableBody>
                 </Table>
@@ -245,6 +294,7 @@ export function CompaniesPage() {
             )}
           </CardContent>
         </Card>
+        </motion.div>
       </div>
     </>
   )
