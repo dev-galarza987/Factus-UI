@@ -5,6 +5,7 @@ import './index.css'
 import App from './App.tsx'
 import { HomePage } from './pages/HomePage.tsx'
 import { CompaniesPage, CompanyFormPage, CompanyDetailsPage, CompanyStatsPage } from './pages/companies'
+import { CustomersPage, CustomerFormPage, CustomerDetailsPage, CustomerStatsPage } from './pages/customers'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -17,6 +18,11 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/companies/new" element={<CompanyFormPage />} />
           <Route path="/companies/:id" element={<CompanyDetailsPage />} />
           <Route path="/companies/:id/edit" element={<CompanyFormPage />} />
+          <Route path="/customers" element={<CustomersPage />} />
+          <Route path="/customers/stats" element={<CustomerStatsPage />} />
+          <Route path="/customers/new" element={<CustomerFormPage />} />
+          <Route path="/customers/:id" element={<CustomerDetailsPage />} />
+          <Route path="/customers/:id/edit" element={<CustomerFormPage />} />
         </Routes>
       </BrowserRouter>
     </App>
