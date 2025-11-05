@@ -24,3 +24,7 @@ dist-ssr
 *.sw?
 .env
 .github
+ENDPOINTS.md
+
+# Dependency directories and files
+node_modules/
