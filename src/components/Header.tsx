@@ -1,6 +1,6 @@
-import { Button } from "../components/ui/button"
-import { ModeToggle } from "../components/mode-toggle"
-import { DatabaseIcon } from "lucide-react"
+import { Button } from "../components/ui/button";
+import { ModeToggle } from "../components/mode-toggle";
+import { DatabaseIcon } from "lucide-react";
 
 export function Header() {
   return (
@@ -28,5 +28,5 @@ export function Header() {
         </nav>
       </div>
     </header>
-  )
+  );
 }
