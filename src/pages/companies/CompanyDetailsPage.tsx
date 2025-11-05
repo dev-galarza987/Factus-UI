@@ -21,6 +21,7 @@ import { Header } from '../../components/Header'
 import { companyService, type Company } from '../../services/companyService'
 import { Skeleton } from '../../components/ui/skeleton'
 import { Alert, AlertDescription } from '../../components/ui/alert'
+import { CompanyRelations } from '../../components/companies/CompanyRelations'
 
 export function CompanyDetailsPage() {
   const navigate = useNavigate()
@@ -298,6 +299,15 @@ export function CompanyDetailsPage() {
             </Card>
             </motion.div>
           </div>
+
+          {/* Relaciones */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.9, duration: 0.7 }}
+          >
+            <CompanyRelations companyId={company.id} />
+          </motion.div>
         </div>
       </div>
     </>

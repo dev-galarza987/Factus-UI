@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { motion } from 'framer-motion'
 import { ArrowLeftIcon, SaveIcon, BuildingIcon } from 'lucide-react'
 import { Button } from '../../components/ui/button'
@@ -10,8 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../..
 import { Alert, AlertDescription } from '../../components/ui/alert'
 import { Header } from '../../components/Header'
 import { companyService, type CreateCompanyDto, type UpdateCompanyDto } from '../../services/companyService'
-
-type CompanyFormData = CreateCompanyDto
+import { createCompanySchema, updateCompanySchema, type CompanyFormData } from '../../lib/validations/company.schema'
 
 export function CompanyFormPage() {
   const navigate = useNavigate()
@@ -27,7 +27,10 @@ export function CompanyFormPage() {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<CompanyFormData>()
+  } = useForm<CompanyFormData>({
+    resolver: zodResolver(isEditMode ? updateCompanySchema : createCompanySchema),
+    mode: 'onBlur',
+  })
 
   // Cargar datos de la empresa si estamos en modo edición
   useEffect(() => {

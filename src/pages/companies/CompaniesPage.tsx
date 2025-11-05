@@ -3,17 +3,16 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { 
   PlusIcon, 
-  SearchIcon, 
   PencilIcon, 
   TrashIcon, 
   EyeIcon,
   BuildingIcon,
   MailIcon,
   PhoneIcon,
-  MapPinIcon
+  MapPinIcon,
+  BarChartIcon
 } from 'lucide-react'
 import { Button } from '../../components/ui/button'
-import { Input } from '../../components/ui/input'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card'
 import { Badge } from '../../components/ui/badge'
 import {
@@ -28,12 +27,13 @@ import { companyService, type Company } from '../../services/companyService'
 import { Header } from '../../components/Header'
 import { Skeleton } from '../../components/ui/skeleton'
 import { Alert, AlertDescription } from '../../components/ui/alert'
+import { AdvancedSearch } from '../../components/companies/AdvancedSearch'
+import type { SearchFilters } from '../../components/companies/AdvancedSearch'
 
 export function CompaniesPage() {
   const [companies, setCompanies] = useState<Company[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [searchQuery, setSearchQuery] = useState('')
   const [filteredCompanies, setFilteredCompanies] = useState<Company[]>([])
 
   // Cargar empresas al montar el componente
@@ -41,19 +41,77 @@ export function CompaniesPage() {
     loadCompanies()
   }, [])
 
-  // Filtrar empresas cuando cambia el search query
-  useEffect(() => {
-    if (searchQuery.trim() === '') {
-      setFilteredCompanies(companies)
-    } else {
-      const filtered = companies.filter(company =>
-        company.businessName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        company.taxId.includes(searchQuery) ||
-        company.email.toLowerCase().includes(searchQuery.toLowerCase())
+  const handleSearch = (filters: SearchFilters) => {
+    let filtered = [...companies]
+
+    // Aplicar filtro de búsqueda general
+    if (filters.query && filters.query.trim() !== '') {
+      const query = filters.query.toLowerCase()
+      filtered = filtered.filter(company =>
+        company.businessName.toLowerCase().includes(query) ||
+        company.taxId.includes(query) ||
+        company.email.toLowerCase().includes(query)
       )
-      setFilteredCompanies(filtered)
     }
-  }, [searchQuery, companies])
+
+    // Aplicar filtro de RUC
+    if (filters.taxId && filters.taxId.trim() !== '') {
+      filtered = filtered.filter(company =>
+        company.taxId.includes(filters.taxId!)
+      )
+    }
+
+    // Aplicar filtro de email
+    if (filters.email && filters.email.trim() !== '') {
+      filtered = filtered.filter(company =>
+        company.email.toLowerCase().includes(filters.email!.toLowerCase())
+      )
+    }
+
+    // Aplicar filtro de fecha desde
+    if (filters.createdAfter) {
+      const afterDate = new Date(filters.createdAfter)
+      filtered = filtered.filter(company =>
+        new Date(company.createdAt) >= afterDate
+      )
+    }
+
+    // Aplicar filtro de fecha hasta
+    if (filters.createdBefore) {
+      const beforeDate = new Date(filters.createdBefore)
+      filtered = filtered.filter(company =>
+        new Date(company.createdAt) <= beforeDate
+      )
+    }
+
+    // Aplicar ordenamiento
+    filtered.sort((a, b) => {
+      let comparison = 0
+      
+      switch (filters.sortBy) {
+        case 'businessName':
+          comparison = a.businessName.localeCompare(b.businessName)
+          break
+        case 'taxId':
+          comparison = a.taxId.localeCompare(b.taxId)
+          break
+        case 'createdAt':
+          comparison = new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          break
+        case 'updatedAt':
+          comparison = new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime()
+          break
+      }
+
+      return filters.sortOrder === 'desc' ? -comparison : comparison
+    })
+
+    setFilteredCompanies(filtered)
+  }
+
+  const handleReset = () => {
+    setFilteredCompanies(companies)
+  }
 
   const loadCompanies = async () => {
     try {
@@ -113,10 +171,17 @@ export function CompaniesPage() {
             </motion.p>
           </div>
           <motion.div
+            className="flex gap-2"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.6, type: "spring", stiffness: 150, damping: 15 }}
           >
+            <Link to="/companies/stats">
+              <Button size="lg" variant="outline" className="gap-2">
+                <BarChartIcon className="size-4" />
+                Estadísticas
+              </Button>
+            </Link>
             <Link to="/companies/new">
               <Button size="lg" className="gap-2">
                 <PlusIcon className="size-4" />
@@ -126,25 +191,13 @@ export function CompaniesPage() {
           </motion.div>
         </motion.div>
 
-        {/* Search Bar */}
+        {/* Advanced Search */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.7 }}
         >
-          <Card className="mb-6">
-            <CardContent className="pt-6">
-              <div className="relative">
-                <SearchIcon className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-                <Input
-                  placeholder="Buscar por nombre, RUC o email..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-            </CardContent>
-          </Card>
+          <AdvancedSearch onSearch={handleSearch} onReset={handleReset} />
         </motion.div>
 
         {/* Error Alert */}
@@ -189,9 +242,9 @@ export function CompaniesPage() {
                 <BuildingIcon className="size-12 text-muted-foreground mx-auto mb-4" />
                 <h3 className="text-lg font-medium mb-2">No hay empresas</h3>
                 <p className="text-muted-foreground mb-4">
-                  {searchQuery ? 'No se encontraron empresas con ese criterio de búsqueda' : 'Comienza creando tu primera empresa'}
+                  {filteredCompanies.length < companies.length ? 'No se encontraron empresas con ese criterio de búsqueda' : 'Comienza creando tu primera empresa'}
                 </p>
-                {!searchQuery && (
+                {filteredCompanies.length === companies.length && (
                   <Link to="/companies/new">
                     <Button>
                       <PlusIcon className="size-4 mr-2" />
@@ -258,7 +311,7 @@ export function CompaniesPage() {
                         </TableCell>
                         <TableCell>
                           <div className="flex items-start gap-1 max-w-xs">
-                            <MapPinIcon className="size-3 text-muted-foreground mt-0.5 flex-shrink-0" />
+                            <MapPinIcon className="size-3 text-muted-foreground mt-0.5 shrink-0" />
                             <span className="text-xs text-muted-foreground line-clamp-2">
                               {company.address}
                             </span>
